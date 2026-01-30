@@ -1,0 +1,473 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Finder - Healthy Living</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #2C5F6F 0%, #1A4A5A 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decorative background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            pointer-events: none;
+        }
+
+        .container-wrapper {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-section {
+            color: white;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .left-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .left-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .right-section {
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        .card-form {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2C5F6F, #3A8A9E);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1A4A5A;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #6B7280;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #1A4A5A;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label-icon {
+            font-size: 1.1rem;
+        }
+
+        .form-control, .form-select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #F9FAFB;
+            color: #1F2937;
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: #2C5F6F;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(44, 95, 111, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #9CA3AF;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-search {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #2C5F6F, #3A8A9E);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(44, 95, 111, 0.3);
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44, 95, 111, 0.4);
+        }
+
+        .btn-search:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: #F0F9FF;
+            border-left: 4px solid #2C5F6F;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #1A4A5A;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-box li {
+            padding: 0.5rem 0;
+            color: #4B5563;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .info-box li::before {
+            content: '✓';
+            color: #2C5F6F;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .left-section {
+                text-align: center;
+            }
+
+            .left-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .feature-item:hover {
+                transform: translateY(-5px);
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 1rem;
+            }
+
+            .card-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .left-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-wrapper">
+        <!-- LEFT SECTION -->
+        <div class="left-section">
+            <div class="logo">
+                <div class="logo-icon">🍽️</div>
+                <div class="logo-text">HealthyEats</div>
+            </div>
+
+            <h1>おかえりなさい！</h1>
+            <p>
+                あなたの健康管理をサポートします。<br>
+                栄養管理、レシピ検索、カロリー計算など、<br>
+                総合的な健康管理ツールをご利用いただけます。
+            </p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-text">食材・料理名・ダイエットタイプで検索可能</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-text">カロリー順でソート、栄養バランスを確認</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🥗</div>
+                    <div class="feature-text">Keto、Vegan、低炭水化物など多様なフィルター</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💡</div>
+                    <div class="feature-text">詳細な栄養成分表示とレシピ手順</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SECTION - FORM -->
+        <div class="right-section">
+            <div class="card-form">
+                <div class="form-header">
+                    <h2>レシピ検索</h2>
+                    <p>健康的で美味しい料理を見つけましょう</p>
+                </div>
+
+                <form action="{% url 'results' %}" method="get">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="form-label-icon">🔎</span>
+                            検索キーワード
+                        </label>
+                        <input
+                            type="text"
+                            name="keyword"
+                            class="form-control"
+                            placeholder="例: チキン、サラダ、和食..."
+                            required
+                        >
+                    </div>
+
+                    <div class="filters-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="form-label-icon">🥗</span>
+                                食事タイプ
+                            </label>
+                            <select name="diet" class="form-select">
+                                <option value="">すべて</option>
+                                <option value="keto">ケトジェニック</option>
+                                <option value="vegan">ビーガン</option>
+                                <option value="vegetarian">ベジタリアン</option>
+                                <option value="paleo">パレオ</option>
+                                <option value="low-carb">低炭水化物</option>
+                                <option value="high-protein">高タンパク</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="form-label-icon">📊</span>
+                                並び順
+                            </label>
+                            <select name="sort" class="form-select">
+                                <option value="">デフォルト</option>
+                                <option value="calories_asc">カロリー: 低 → 高</option>
+                                <option value="calories_desc">カロリー: 高 → 低</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-search">
+                        <span>🔍</span>
+                        検索する
+                    </button>
+                </form>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        💡 ヒント
+                    </div>
+                    <ul>
+                        <li>食材や料理のジャンルで検索できます</li>
+                        <li>カロリーでソートして理想の食事を見つけましょう</li>
+                        <li>食事タイプでフィルタリングが可能です</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+/* Hero Section Styling */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                url('https://media.cnn.com/api/v1/images/stellar/prod/gettyimages-1273516682.jpg?c=16x9&q=h_653,w_1160,c_fill/f_avif') center center / cover no-repeat;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+/* Search Form Styling */
+.search-form .input-group {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-form .form-control,
+.search-form .form-select {
+    border: none;
+    padding: 15px 20px;
+}
+
+.search-form .form-control:focus,
+.search-form .form-select:focus {
+    box-shadow: none;
+    border-color: #58878f;
+}
+
+.search-form .btn-primary {
+    background-color: #58878f;
+    border-color: #58878f;
+    padding: 15px 30px;
+    white-space: nowrap;
+}
+
+.search-form .btn-primary:hover {
+    background-color: #4a7279;
+    border-color: #4a7279;
+}
+
+/* Logo Styling */
+.logo-text {
+    color: #58878f !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 350px;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .search-form .input-group {
+        flex-direction: column;
+    }
+    
+    .search-form .form-control,
+    .search-form .form-select,
+    .search-form .btn {
+        border-radius: 8px !important;
+        margin-bottom: 10px;
+        max-width: 100%;
+    }
+}

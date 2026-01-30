@@ -1,0 +1,591 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ recipe.recipe_name }} - HealthyEats</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F3F4F6;
+            min-height: 100vh;
+            color: #1F2937;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2C5F6F 0%, #1A4A5A 100%);
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Recipe Section */
+        .recipe-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .recipe-image-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            height: 400px;
+            background: linear-gradient(135deg, #E0F2F7, #B2E4EC);
+        }
+
+        .recipe-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recipe-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1A4A5A;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .recipe-description {
+            color: #6B7280;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #F3F4F6;
+        }
+
+        .serving-info {
+            background: linear-gradient(135deg, #E0F2F7, #F0F9FF);
+            border-left: 4px solid #2C5F6F;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .serving-icon {
+            font-size: 2rem;
+        }
+
+        .serving-text {
+            color: #1A4A5A;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1A4A5A;
+            margin: 2.5rem 0 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        /* Ingredients */
+        .ingredients-list {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 1.5rem;
+            list-style: none;
+        }
+
+        .ingredients-list li {
+            padding: 0.75rem 0;
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .ingredients-list li:last-child {
+            border-bottom: none;
+        }
+
+        .ingredients-list li::before {
+            content: '✓';
+            color: #2C5F6F;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Instructions */
+        .instructions-list {
+            list-style: none;
+            counter-reset: step-counter;
+            padding: 0;
+        }
+
+        .instructions-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.75rem;
+            padding-left: 4rem;
+            position: relative;
+            color: #374151;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .instructions-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: linear-gradient(135deg, #2C5F6F, #3A8A9E);
+            color: white;
+            font-weight: 700;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(44, 95, 111, 0.3);
+        }
+
+        /* Nutrition Panel */
+        .nutrition-panel {
+            position: sticky;
+            top: calc(80px + 2rem);
+        }
+
+        .nutrition-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .nutrition-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nutrition-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1A4A5A;
+        }
+
+        .nutrition-icon {
+            font-size: 1.8rem;
+        }
+
+        .nutrition-fda {
+            border: 3px solid #1A4A5A;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        .nutrition-fda .fda-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #1A4A5A;
+            border-bottom: 8px solid #1A4A5A;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nutrition-fda .fda-serving {
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.75rem 0;
+            border-bottom: 4px solid #1A4A5A;
+            margin-bottom: 0.5rem;
+        }
+
+        .nutrition-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 0.95rem;
+        }
+
+        .nutrition-row.major {
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 5px solid #1A4A5A;
+            color: #1A4A5A;
+        }
+
+        .nutrition-row.bold {
+            font-weight: 700;
+            border-bottom: 2px solid #6B7280;
+        }
+
+        .nutrition-row.indent {
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nutrition-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #F9FAFB;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #6B7280;
+            line-height: 1.6;
+        }
+
+        .nutrition-note strong {
+            color: #374151;
+        }
+
+        /* Back Button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #2C5F6F, #3A8A9E);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(44, 95, 111, 0.3);
+            margin-top: 2.5rem;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 95, 111, 0.4);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nutrition-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .recipe-section {
+                padding: 1.5rem;
+            }
+
+            .recipe-image-wrapper {
+                height: 300px;
+            }
+
+            .recipe-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .instructions-list li {
+                padding-left: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'index' %}" class="logo-link">
+                <div class="logo-icon">🍽️</div>
+                <div class="logo-text">HealthyEats</div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'index' %}" class="nav-link">
+                    <span>🏠</span>
+                    <span>ホーム</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-grid">
+            <!-- Left: Recipe Details -->
+            <div class="recipe-section">
+                <div class="recipe-image-wrapper">
+                    <img 
+                        src="{% if recipe.recipe_image %}{{ recipe.recipe_image }}{% else %}https://via.placeholder.com/800x600/E0F2F7/2C5F6F?text=No+Image{% endif %}" 
+                        alt="{{ recipe.recipe_name }}"
+                        class="recipe-image"
+                    >
+                </div>
+
+                <div class="recipe-header">
+                    <h1>{{ recipe.recipe_name }}</h1>
+                    <p class="recipe-description">
+                        {{ recipe.recipe_description|default:"健康的で美味しいレシピです。栄養バランスが良く、簡単に作れます。" }}
+                    </p>
+                </div>
+
+                {% if recipe.serving_size %}
+                <div class="serving-info">
+                    <div class="serving-icon">🍽️</div>
+                    <div>
+                        <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 0.25rem;">1人分</div>
+                        <div class="serving-text">{{ recipe.serving_size }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if recipe.ingredients %}
+                <h2 class="section-title">
+                    <span class="section-icon">🧂</span>
+                    材料
+                </h2>
+                <ul class="ingredients-list">
+                    {% for ing in recipe.ingredients %}
+                    <li>{{ ing }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if recipe.instructions %}
+                <h2 class="section-title">
+                    <span class="section-icon">👨‍🍳</span>
+                    作り方
+                </h2>
+                <ol class="instructions-list">
+                    {% for step in recipe.instructions %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+
+                <a href="{% url 'index' %}" class="btn-back">
+                    <span>←</span>
+                    検索に戻る
+                </a>
+            </div>
+
+            <!-- Right: Nutrition Panel -->
+            <div class="nutrition-panel">
+                <div class="nutrition-card">
+                    <div class="nutrition-header">
+                        <span class="nutrition-icon">🥗</span>
+                        <h2>栄養成分表示</h2>
+                    </div>
+
+                    {% if recipe.nutrition and recipe.nutrition.Calories %}
+                    <div class="nutrition-fda">
+                        <div class="fda-title">Nutrition Facts</div>
+
+                        {% if recipe.serving_size %}
+                        <div class="fda-serving">
+                            1食分: {{ recipe.serving_size }}
+                        </div>
+                        {% endif %}
+
+                        <div class="nutrition-row major">
+                            <span>カロリー</span>
+                            <strong>{{ recipe.nutrition.Calories }}</strong>
+                        </div>
+
+                        {% if recipe.nutrition.Fat %}
+                        <div class="nutrition-row bold">
+                            <span>脂質</span>
+                            <span>{{ recipe.nutrition.Fat }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Saturated_Fat %}
+                        <div class="nutrition-row indent">
+                            <span>飽和脂肪酸</span>
+                            <span>{{ recipe.nutrition.Saturated_Fat }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Trans_Fat %}
+                        <div class="nutrition-row indent">
+                            <span>トランス脂肪酸</span>
+                            <span>{{ recipe.nutrition.Trans_Fat }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Cholesterol %}
+                        <div class="nutrition-row bold">
+                            <span>コレステロール</span>
+                            <span>{{ recipe.nutrition.Cholesterol }}mg</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Sodium %}
+                        <div class="nutrition-row bold">
+                            <span>ナトリウム</span>
+                            <span>{{ recipe.nutrition.Sodium }}mg</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Carbohydrate %}
+                        <div class="nutrition-row bold">
+                            <span>炭水化物</span>
+                            <span>{{ recipe.nutrition.Carbohydrate }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Fiber %}
+                        <div class="nutrition-row indent">
+                            <span>食物繊維</span>
+                            <span>{{ recipe.nutrition.Fiber }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Sugar %}
+                        <div class="nutrition-row indent">
+                            <span>糖質</span>
+                            <span>{{ recipe.nutrition.Sugar }}g</span>
+                        </div>
+                        {% endif %}
+
+                        {% if recipe.nutrition.Protein %}
+                        <div class="nutrition-row bold">
+                            <span>たんぱく質</span>
+                            <span>{{ recipe.nutrition.Protein }}g</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="nutrition-note">
+                        <strong>注意:</strong> 栄養成分は1食分あたりの値です。使用する食材によって多少変動する場合があります。
+                    </div>
+
+                    {% else %}
+                    <div style="padding: 2rem; text-align: center; color: #6B7280; background: #F9FAFB; border-radius: 12px;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                        <div style="font-weight: 600; color: #374151;">栄養データが利用できません</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem;">このレシピには栄養情報がありません</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
